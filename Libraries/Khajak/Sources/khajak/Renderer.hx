@@ -20,34 +20,34 @@ using kha.Float32ArrayExtensions;
 
 class Renderer {
 	
-	public static var PARTICLE_BATCH_SIZE : Int = 256;
+	public static var PARTICLE_BATCH_SIZE :Int = 256;
 	
-	var basicPipeline: BasicPipeline;
-	var basicStencilPipeline: BasicPipeline;
-	var billboardPipeline: BillboardPipeline;
-	var billboardPipelineInstanced: BillboardPipeline;
-	var vertexBuffersBillboardInstanced : Array<VertexBuffer> = new Array();
+	var basicPipeline:BasicPipeline;
+	var basicStencilPipeline:BasicPipeline;
+	var billboardPipeline:BillboardPipeline;
+	var billboardPipelineInstanced:BillboardPipeline;
+	var vertexBuffersBillboardInstanced :Array<VertexBuffer> = new Array();
 	
-	public var view: FastMatrix4;
-	public var projection: FastMatrix4;
-	var splitscreenCount: Int;
+	public var view:FastMatrix4;
+	public var projection:FastMatrix4;
+	var splitscreenCount:Int;
 	
-	public var light1: Light;
-	public var light2: Light;
-	public var light3: Light;
-	public var light4: Light;
-	public var light5: Light;
-	public var light6: Light;
-	public var light7: Light;
-	public var light8: Light;
-	public var objects: Array<RenderObject>;
-	public var particleEmitters: Array<Emitter>;
+	public var light1:Light;
+	public var light2:Light;
+	public var light3:Light;
+	public var light4:Light;
+	public var light5:Light;
+	public var light6:Light;
+	public var light7:Light;
+	public var light8:Light;
+	public var objects:Array<RenderObject>;
+	public var particleEmitters:Array<Emitter>;
 	
-	public var clearColor: Color;
+	public var clearColor:Color;
 	
-	public static var the(default, null): Renderer;
+	public static var the(default, null):Renderer;
 	
-	public function new(clearColor: Color) {
+	public function new(clearColor:Color) {
 		this.clearColor = clearColor;
 		/*
 		basicPipeline = new BasicPipeline(Shaders.basic_frag, Shaders.basic_vert, [ VertexStructures.Basic ]);
@@ -55,10 +55,10 @@ class Renderer {
 		billboardPipeline = new BillboardPipeline(Shaders.billboard_frag, Shaders.billboard_uniform_vert, [ VertexStructures.Billboards ]);
 		billboardPipelineInstanced = new BillboardPipeline(Shaders.billboard_frag, Shaders.billboard_attribute_vert, [ VertexStructures.Billboards, VertexStructures.BillboardsInstanced ]);
 */
-	basicPipeline = new BasicPipeline(Shaders.basic_frag, Shaders.basic_vert, [ VertexStructures.Basic ]);
-	basicStencilPipeline = new BasicPipeline(Shaders.basic_frag, Shaders.basic_vert, [ VertexStructures.Basic ], true);
-	billboardPipeline = new BillboardPipeline(Shaders.billboard_frag, Shaders.billboard_uniform_vert, [ VertexStructures.Billboards ]);
-	billboardPipelineInstanced = new BillboardPipeline(Shaders.billboard_frag, Shaders.billboard_attribute_vert, [ VertexStructures.Billboards, VertexStructures.BillboardsInstanced ]);
+	basicPipeline = new BasicPipeline(Shaders.mesh_frag, Shaders.mesh_vert, [ VertexStructures.Basic ]);
+	basicStencilPipeline = new BasicPipeline(Shaders.mesh_frag, Shaders.mesh_vert, [ VertexStructures.Basic ], true);
+	billboardPipeline = new BillboardPipeline(Shaders.mesh_frag, Shaders.mesh_vert, [ VertexStructures.Billboards ]);
+	billboardPipelineInstanced = new BillboardPipeline(Shaders.mesh_frag, Shaders.mesh_vert, [ VertexStructures.Billboards, VertexStructures.BillboardsInstanced ]);
 
 		vertexBuffersBillboardInstanced[1] = new VertexBuffer(
 			PARTICLE_BATCH_SIZE,
@@ -82,20 +82,20 @@ class Renderer {
 		particleEmitters = new Array<Emitter>();
 	}
 	
-	public static function init(renderer: Renderer) {
+	public static function init(renderer:Renderer) {
 		the = renderer;
 	}
 	
-	public function setSplitscreenMode(count: Int) {
+	public function setSplitscreenMode(count:Int) {
 		splitscreenCount = count;
 		projection = FastMatrix4.perspectiveProjection(Math.PI / 4, (System.windowWidth() / splitscreenCount) / System.windowHeight(), 0.1, 100.0);
 	}
 	
-	public function updateCamera(cameraPos: FastVector3, cameraLook: FastVector3) {
+	public function updateCamera(cameraPos:FastVector3, cameraLook:FastVector3) {
 		view = FastMatrix4.lookAt(cameraPos, cameraLook, new FastVector3(0, 1, 0));
 	}
 	
-	public function beginRender(frame: Framebuffer, splitscreenID: Int = 0) {
+	public function beginRender(frame:Framebuffer, splitscreenID:Int = 0) {
 		var g4 = frame.g4;
 		
 		g4.begin();
@@ -108,18 +108,18 @@ class Renderer {
 		g4.clear(clearColor, 10000, 0);
 	}
 	
-	public function endRender(frame: Framebuffer, splitscreenID: Int = 0) {
+	public function endRender(frame:Framebuffer, splitscreenID:Int = 0) {
 		var g4 = frame.g4;
 		g4.disableScissor();
         g4.end();
 	}
 	
-	public function render(frame: Framebuffer, splitscreenID: Int = 0) {
+	public function render(frame:Framebuffer, splitscreenID:Int = 0) {
 		// Render 3d scene
 		var g4 = frame.g4;
 		
 		for (object in objects) {
-			renderObject(g4, object.writestencil ? basicStencilPipeline : basicPipeline, object);
+			renderObject(g4, object.writestencil ? basicStencilPipeline :basicPipeline, object);
 		}
 		
 		billboardPipeline.set(g4, view);
@@ -132,7 +132,7 @@ class Renderer {
 			
 			var bufferData = vertexBuffersBillboardInstanced[1].lock();
 			var i = 0;
-			var particleTexture: kha.Image = null;
+			var particleTexture:kha.Image = null;
 			for (emitter in particleEmitters) {				
 				for (pi in 0...emitter.particleCount) {
 					if (i == PARTICLE_BATCH_SIZE || (emitter.particles[pi].texture != particleTexture && particleTexture != null)) {
@@ -169,12 +169,12 @@ class Renderer {
 		
 		g2.begin(false);
 		
-		// TODO: renderGUI
+		// TODO:renderGUI
 		
 		g2.end();*/
     }
 	
-	function actuallyRenderParticlesInstanced(g: Graphics, i: Int, texture: kha.Image) {
+	function actuallyRenderParticlesInstanced(g:Graphics, i:Int, texture:kha.Image) {
 		vertexBuffersBillboardInstanced[1].unlock();
 		
 		g.setVertexBuffers(vertexBuffersBillboardInstanced);
@@ -185,7 +185,7 @@ class Renderer {
 		g.drawIndexedVerticesInstanced(i);
 	}
 	
-	function renderObject(g4: Graphics, pipeline: BasicPipeline, object: RenderObject) {
+	function renderObject(g4:Graphics, pipeline:BasicPipeline, object:RenderObject) {
 		pipeline.set(g4, view, light1, light2, light3, light4, light5, light6, light7, light8);
 		
 		g4.setFloat3(pipeline.colorID, object.color.R, object.color.G, object.color.B);
@@ -200,7 +200,7 @@ class Renderer {
 		g4.drawIndexedVertices();
 	}
 	
-	function renderParticle(g4: Graphics, pipeline: BillboardPipeline, particle: Particle) {
+	function renderParticle(g4:Graphics, pipeline:BillboardPipeline, particle:Particle) {
 		g4.setFloat4(pipeline.baseColorID, particle.color.R, particle.color.G, particle.color.B, particle.color.A);
 		g4.setVector2(pipeline.sizeID, particle.size);
 		g4.setVector3(pipeline.centerID, particle.position);
@@ -215,7 +215,7 @@ class Renderer {
 		g4.drawIndexedVertices();
 	}
 	
-	private function addParticleToInstanceBuffers(particle : Particle, bufferData : Float32Array, position : Int) {
+	private function addParticleToInstanceBuffers(particle :Particle, bufferData :Float32Array, position :Int) {
 		var actualPosition = position * Std.int(VertexStructures.BillboardsInstanced.byteSize() / 4);
 		
 		bufferData.setVector2(actualPosition, particle.size);
@@ -225,16 +225,16 @@ class Renderer {
 		bufferData.setMatrix4(actualPosition + 11, calculateMVP(particle.model));
 	}
 	
-	function calculateMVP(model: FastMatrix4) : FastMatrix4 {
-		var mvp : FastMatrix4 = FastMatrix4.identity();
+	function calculateMVP(model:FastMatrix4) :FastMatrix4 {
+		var mvp :FastMatrix4 = FastMatrix4.identity();
 		mvp = mvp.multmat(projection);
 		mvp = mvp.multmat(view);
 		mvp = mvp.multmat(model);
 		return mvp;
 	}
 	
-	public function calculateMV(): FastMatrix4 {
-		var mvp : FastMatrix4 = FastMatrix4.identity();
+	public function calculateMV():FastMatrix4 {
+		var mvp :FastMatrix4 = FastMatrix4.identity();
 		mvp = mvp.multmat(projection);
 		mvp = mvp.multmat(view);
 		return mvp;
