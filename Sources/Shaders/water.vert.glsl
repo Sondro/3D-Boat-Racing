@@ -5,7 +5,7 @@ uniform mat4 matrix;
 uniform float time;
 uniform float zoffset;
 
-attribute vec2 pos;
+vec2 pos;
 
 mediump vec4 color;
 
@@ -71,11 +71,14 @@ float map(vec2 uv) {
     }
     return h;// p.y - h;
 }
+vec4 position;
 
 void main() {
 	vec2 newpos = vec2(pos.x, pos.y + zoffset);
 	//vec4 coord = texture2D(tex, pos);
 	float height = map(newpos); //sin(pos.x + time) * sin(pos.x + time * 1.1) + sin(pos.y + time * 1.1) * sin(pos.y + time * 1.2);
 	gl_Position = matrix * vec4(newpos.x, height /*coord.r*/, newpos.y, 1.0);
+    //position = matrix * vec4(newpos.x, height /*coord.r*/, newpos.y, 1.0);
+
 	color = vec4(height / 2.0, height / 2.0, 1.0 + height / 2.0 /*coord.r*/, 0.0);
 }

@@ -35,9 +35,13 @@ class Water {
 		
 		vertexMap = Image.create(1024, 1024, TextureFormat.L8);
 		var pixels = vertexMap.lock();
-		for (y in 0...1024)
-			for (x in 0...1024)
+		for (y in 0...1024) 
+		{
+			for (x in 0...1024) 
+			{
 				pixels.set(y * 1024 + x, Random.getUpTo(255));
+			}
+		}
 		vertexMap.unlock();
 		
 		var structure = new VertexStructure();
