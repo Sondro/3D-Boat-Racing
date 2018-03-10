@@ -4,12 +4,11 @@
 precision mediump float;
 #endif
 
-uniform sampler2D tex;
-
 vec2 vUV;
 vec4 fragmentColor;
-vec4 color;
+
+uniform sampler2D tex;
 
 void kore() {  
-	color = fragmentColor * vec4(texture2D(tex, vUV).rgba);
+	gl_FragColor = fragmentColor * vec4(texture2D(tex, vUV).rgba);
 }

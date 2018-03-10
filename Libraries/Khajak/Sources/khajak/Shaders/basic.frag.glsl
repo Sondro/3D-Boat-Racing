@@ -4,21 +4,21 @@
 precision mediump float;
 #endif
 
- vec2 vUV;
- vec3 positionWorldspace;
- vec3 normalCameraspace;
- vec3 eyeDirectionCameraspace;
- vec3 lightDirectionCameraspace1;
- vec3 lightDirectionCameraspace2;
- vec3 lightDirectionCameraspace3;
- vec3 lightDirectionCameraspace4;
+vec2 vUV;
+vec3 positionWorldspace;
+vec3 normalCameraspace;
+vec3 eyeDirectionCameraspace;
+vec3 lightDirectionCameraspace1;
+vec3 lightDirectionCameraspace2;
+vec3 lightDirectionCameraspace3;
+vec3 lightDirectionCameraspace4;
+/*vec3 lightDirectionCameraspace5;
+vec3 lightDirectionCameraspace6;
+vec3 lightDirectionCameraspace7;
+vec3 lightDirectionCameraspace8;*/
+vec4 fragmentColor;
 
-/* vec3 lightDirectionCameraspace5;
- vec3 lightDirectionCameraspace6;
- vec3 lightDirectionCameraspace7;
- vec3 lightDirectionCameraspace8;*/
-
- vec4 fragmentColor;
+vec4 color;
 
 uniform sampler2D tex;
 uniform vec3 light1Color;
@@ -48,10 +48,8 @@ uniform vec3 light8Position;
 
 vec3 calculateLight(vec3 lightColor, float lightPower, vec3 pos, vec3 directionCameraspace, vec3 materialDiffuseColor, vec3 materialSpecularColor);  // declare a function
 
-vec4 color;
-
 void kore() {
-	vec3 materialDiffuseColor = fragmentColor.xyz + texture2D(tex, vUV).xyz;
+	vec3 materialDiffuseColor = fragmentColor.xyz + texture(tex, vUV).xyz;
 	vec3 materialAmbientColor = vec3(0.1, 0.1, 0.1) * materialDiffuseColor;
 	vec3 materialSpecularColor = vec3(0.3, 0.3, 0.3);
 	
@@ -65,47 +63,40 @@ void kore() {
 	calculateLight(light7Color, light7Power, light7Position, lightDirectionCameraspace7, materialDiffuseColor, materialSpecularColor) +
 	calculateLight(light8Color, light8Power, light8Position, lightDirectionCameraspace8, materialDiffuseColor, materialSpecularColor);*/
 
-	color = vec4(result, fragmentColor.a);
+	fragmentColor = vec4(result, fragmentColor.a);
 }
 
 vec3 calculateLight(vec3 lightColor, float lightPower, vec3 pos, vec3 directionCameraspace, vec3 materialDiffuseColor, vec3 materialSpecularColor) {
 	// Distance to the light
 	float distance = length(pos - positionWorldspace);
 
-	// Normal of the computed fragment,  camera space
+	// Normal of the computed fragment, in camera space
 	vec3 n = normalize(normalCameraspace);
 	// Direction of the light (from the fragment to the light)
 	vec3 l = normalize(directionCameraspace);
-	// Cose of the angle between the normal and the light direction, 
+	// Cosine of the angle between the normal and the light direction, 
 	// clamped above 0
 	//  - light is at the vertical of the triangle -> 1
 	//  - light is perpendicular to the triangle -> 0
-	//  - light is behd the triangle -> 0
+	//  - light is behind the triangle -> 0
 	float cosTheta = clamp(dot(n, l), 0.0, 1.0);
 
 	// Eye vector (towards the camera)
 	vec3 E = normalize(eyeDirectionCameraspace);
-	// Direction  which the triangle reflects the light
+	// Direction in which the triangle reflects the light
 	vec3 R = (-l) - 2.0 * dot(n, (-l)) * n;
-	//vec3 R = reflect(-l,n); // TODO: waitg for krafix fix
+	//vec3 R = reflect(-l,n); // TODO: waiting for krafix fix
 
-	// Cose of the angle between the Eye vector and the Reflect vector,
+	// Cosine of the angle between the Eye vector and the Reflect vector,
 	// clamped to 0
-	//  - Lookg to the reflection - 1
-	//  - Lookg elsewhere - < 1
+	//  - Looking into the reflection - 1
+	//  - Looking elsewhere - < 1
 	float cosAlpha = clamp(dot(E, R), 0.0, 1.0);
 
-
-	
-	color =	materialDiffuseColor * lightColor * lightPower * cosTheta / (distance * distance) +
-		materialSpecularColor * lightColor * lightPower * pow(cosAlpha, 5.0) / (distance * distance)
-
-///*
-	return vec4(
+	return vec3(
 		// Diffuse: "color" of the object
 		materialDiffuseColor * lightColor * lightPower * cosTheta / (distance * distance) +
 		// Specular: reflective highlight, like a mirror
 		materialSpecularColor * lightColor * lightPower * pow(cosAlpha, 5.0) / (distance * distance)
 	);
-//	*/
 }

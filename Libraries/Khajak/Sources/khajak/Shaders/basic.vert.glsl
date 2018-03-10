@@ -50,22 +50,20 @@ vec3 lightDirectionCameraspace4;
 vec3 lightDirectionCameraspace6;
 vec3 lightDirectionCameraspace7;
 vec3 lightDirectionCameraspace8;*/
-//vec4 fragmentColor;
-
 vec4 fragmentColor;
 
 void kore() {
 	gl_Position = mvpMatrix * vec4(pos, 1.0);
 
-	// Position of the vertex, worldspace : M * position
+	// Position of the vertex, in worldspace : M * position
 	positionWorldspace = (modelMatrix * vec4(pos, 1.0)).xyz;
 
-	// Vector that goes from the vertex to the camera, camera space.
-	// camera space, the camera is at the orig(0,0,0).
+	// Vector that goes from the vertex to the camera, in camera space.
+	// In camera space, the camera is at the origin (0,0,0).
 	vec3 vertexPositionCameraspace = (viewMatrix * modelMatrix * vec4(pos, 1.0)).xyz;
 	eyeDirectionCameraspace = vec3(0.0, 0.0, 0.0) - vertexPositionCameraspace;
 
-	// Vector that goes from the vertex to the light, camera space. M is ommited because it's identity.
+	// Vector that goes from the vertex to the light, in camera space. M is ommited because it's identity.
 	vec3 lightPositionCameraspace1 = (viewMatrix * vec4(light1Position, 1.0)).xyz;
 	lightDirectionCameraspace1 = lightPositionCameraspace1 + eyeDirectionCameraspace;
 	vec3 lightPositionCameraspace2 = (viewMatrix * vec4(light2Position, 1.0)).xyz;
@@ -83,7 +81,7 @@ void kore() {
 	vec3 lightPositionCameraspace8 = (viewMatrix * vec4(light8Position, 1.0)).xyz;
 	lightDirectionCameraspace8 = lightPositionCameraspace8 + eyeDirectionCameraspace;*/
 	
-	// Normal of the the vertex, camera space
+	// Normal of the the vertex, in camera space
 	normalCameraspace = (viewMatrix * modelMatrix * vec4(nor, 0.0)).xyz; // Only correct if modelMatrix does not scale the model! Use its inverse transpose if not.
 	
 	vUV = uv;
