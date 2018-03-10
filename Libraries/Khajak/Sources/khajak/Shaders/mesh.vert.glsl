@@ -12,7 +12,7 @@ out vec4 fragmentColor;
 vec4 position;
 
 void main() {
-	//gl_Position = m * vec4(pos, 1.0);
-	position = m * vec4(pos, 1.0);
+	gl_Position = m * vec4(pos, 1.0);
+	//position = m * vec4(pos, 1.0);
 	fragmentColor = col;
 }
