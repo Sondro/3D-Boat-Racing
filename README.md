@@ -9,6 +9,7 @@
 |     E      |    1P charge-up right   |
 |     A      |       1P row left       |
 |     D      |       1P row right      |
+|            |                         |
 |     U      |    2P charge-up left    |
 |     O      |    2P charge-up right   |
 |     J      |       2P row left       |
