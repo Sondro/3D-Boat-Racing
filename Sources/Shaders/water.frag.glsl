@@ -1,10 +1,8 @@
 #version 450
 
-//mediump vec4 color;
-vec4 color;
-
-vec4 outColor;
+in vec4 color;
+out vec4 frag;
 
 void main() {
-	outColor = color;
+	frag = color;
 }
