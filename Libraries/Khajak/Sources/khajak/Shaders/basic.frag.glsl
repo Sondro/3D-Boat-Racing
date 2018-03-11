@@ -1,24 +1,20 @@
 #version 450
 
-#ifdef GL_ES
-precision mediump float;
-#endif
+in vec2 vUV;
+in vec3 positionWorldspace;
+in vec3 normalCameraspace;
+in vec3 eyeDirectionCameraspace;
+in vec3 lightDirectionCameraspace1;
+in vec3 lightDirectionCameraspace2;
+in vec3 lightDirectionCameraspace3;
+in vec3 lightDirectionCameraspace4;
+//in vec3 lightDirectionCameraspace5;
+//in vec3 lightDirectionCameraspace6;
+//in vec3 lightDirectionCameraspace7;
+//in vec3 lightDirectionCameraspace8;
+in vec4 fragmentColor;
 
-vec2 vUV;
-vec3 positionWorldspace;
-vec3 normalCameraspace;
-vec3 eyeDirectionCameraspace;
-vec3 lightDirectionCameraspace1;
-vec3 lightDirectionCameraspace2;
-vec3 lightDirectionCameraspace3;
-vec3 lightDirectionCameraspace4;
-/*vec3 lightDirectionCameraspace5;
-vec3 lightDirectionCameraspace6;
-vec3 lightDirectionCameraspace7;
-vec3 lightDirectionCameraspace8;*/
-vec4 fragmentColor;
-
-vec4 color;
+out vec4 frag;
 
 uniform sampler2D tex;
 uniform vec3 light1Color;
@@ -48,7 +44,7 @@ uniform vec3 light8Position;
 
 vec3 calculateLight(vec3 lightColor, float lightPower, vec3 pos, vec3 directionCameraspace, vec3 materialDiffuseColor, vec3 materialSpecularColor);  // declare a function
 
-void kore() {
+void main() {
 	vec3 materialDiffuseColor = fragmentColor.xyz + texture(tex, vUV).xyz;
 	vec3 materialAmbientColor = vec3(0.1, 0.1, 0.1) * materialDiffuseColor;
 	vec3 materialSpecularColor = vec3(0.3, 0.3, 0.3);
@@ -63,7 +59,7 @@ void kore() {
 	calculateLight(light7Color, light7Power, light7Position, lightDirectionCameraspace7, materialDiffuseColor, materialSpecularColor) +
 	calculateLight(light8Color, light8Power, light8Position, lightDirectionCameraspace8, materialDiffuseColor, materialSpecularColor);*/
 
-	fragmentColor = vec4(result, fragmentColor.a);
+	frag = vec4(result, fragmentColor.a);
 }
 
 vec3 calculateLight(vec3 lightColor, float lightPower, vec3 pos, vec3 directionCameraspace, vec3 materialDiffuseColor, vec3 materialSpecularColor) {
