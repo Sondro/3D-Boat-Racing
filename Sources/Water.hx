@@ -48,8 +48,8 @@ class Water {
 		structure.add("pos", VertexData.Float2);
 		pipeline = new PipelineState();
 		pipeline.inputLayout = [structure];
-		pipeline.vertexShader = Shaders.mesh_vert;
-		pipeline.fragmentShader = Shaders.mesh_frag;
+		pipeline.vertexShader = Shaders.water_vert;
+		pipeline.fragmentShader = Shaders.water_frag;
 		pipeline.depthWrite = true;
 		pipeline.depthMode = CompareMode.Less;
 		pipeline.stencilMode = kha.graphics4.CompareMode.Equal;
