@@ -1,6 +1,5 @@
 package;
 
-
 import kha.input.Keyboard;
 import kha.input.KeyCode;
 import kha.input.Gamepad;
@@ -74,45 +73,45 @@ class InputManager
 	}
 	
     inline function onKeyDown(inputKey:KeyCode) {
-		if (inputKey == KeyCode.S) {
-			startDown[0] = true;
-		}
-		if (inputKey == KeyCode.K) {
-			startDown[1] = true;
-		}
-		else if (inputKey == KeyCode.Q) {
-			onInsert(0, true);
-		}
-		else if (inputKey == KeyCode.U) {
-			onInsert(1, true);
-		}
-		else if (inputKey == KeyCode.E) {
+			if (inputKey == KeyCode.S) {
+				startDown[0] = true;
+			}
+			if (inputKey == KeyCode.K) {
+				startDown[1] = true;
+			}
+			else if (inputKey == KeyCode.Q) {
+				onInsert(0, true);
+			}
+			else if (inputKey == KeyCode.U) {
+				onInsert(1, true);
+			}
+			else if (inputKey == KeyCode.E) {
 			onInsert(0, false);
-		}
-		else if (inputKey == KeyCode.O) {
+			}
+			else if (inputKey == KeyCode.O) {
 			onInsert(1, false);
-		}
-		else if (inputKey == KeyCode.A) {
+			}
+			else if (inputKey == KeyCode.A) {
 			onPush(0, true);
-		}
-		else if (inputKey == KeyCode.J) {
+			}
+			else if (inputKey == KeyCode.J) {
 			onPush(1, true);
-		}
-		else if (inputKey == KeyCode.D) {
+			}
+			else if (inputKey == KeyCode.D) {
 			onPush(0, false);
-		}
-		else if (inputKey == KeyCode.L) {
+			}
+			else if (inputKey == KeyCode.L) {
 			onPush(1, false);
-		}
+			}
     }
 
     inline function onKeyUp(inputKey:KeyCode) {
-		if (inputKey == KeyCode.S) {
-			startDown[0] = false;
-		}
-		if (inputKey == KeyCode.K) {
-			startDown[1] = false;
-		}
+			if (inputKey == KeyCode.S) {
+				startDown[0] = false;
+			}
+			if (inputKey == KeyCode.K) {
+				startDown[1] = false;
+			}
     }
 	
 	inline function onGamepadAxis(padID: Int, axis: Int, value: Float) {
