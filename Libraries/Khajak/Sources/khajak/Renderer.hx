@@ -49,16 +49,11 @@ class Renderer {
 	
 	public function new(clearColor:Color) {
 		this.clearColor = clearColor;
-		/*
+
 		basicPipeline = new BasicPipeline(Shaders.basic_frag, Shaders.basic_vert, [ VertexStructures.Basic ]);
 		basicStencilPipeline = new BasicPipeline(Shaders.basic_frag, Shaders.basic_vert, [ VertexStructures.Basic ], true);
 		billboardPipeline = new BillboardPipeline(Shaders.billboard_frag, Shaders.billboard_uniform_vert, [ VertexStructures.Billboards ]);
 		billboardPipelineInstanced = new BillboardPipeline(Shaders.billboard_frag, Shaders.billboard_attribute_vert, [ VertexStructures.Billboards, VertexStructures.BillboardsInstanced ]);
-*/
-	basicPipeline = new BasicPipeline(Shaders.mesh_frag, Shaders.mesh_vert, [ VertexStructures.Basic ]);
-	basicStencilPipeline = new BasicPipeline(Shaders.mesh_frag, Shaders.mesh_vert, [ VertexStructures.Basic ], true);
-	billboardPipeline = new BillboardPipeline(Shaders.mesh_frag, Shaders.mesh_vert, [ VertexStructures.Billboards ]);
-	billboardPipelineInstanced = new BillboardPipeline(Shaders.mesh_frag, Shaders.mesh_vert, [ VertexStructures.Billboards, VertexStructures.BillboardsInstanced ]);
 
 		vertexBuffersBillboardInstanced[1] = new VertexBuffer(
 			PARTICLE_BATCH_SIZE,
