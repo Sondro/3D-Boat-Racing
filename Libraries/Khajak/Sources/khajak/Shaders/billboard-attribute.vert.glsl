@@ -1,4 +1,4 @@
 #version 450
 
-#define attributeOrUniform attribute
+#define attributeOrUniform in
 #include "billboard.vert.inc.glsl"
